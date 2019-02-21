@@ -38,15 +38,16 @@ class LoginView(Resource):
 
             token = uuid1().hex
             login_user_info = {
+                'token': token,
                 'id': user_query.id,
                 'uname': user_query.uname,
                 'phone': user_query.phone,
                 'email': user_query.email
             }
             redis_store.hmset(f'token:{token}', login_user_info)
-            redis_store.expire(f'token:{token}', 60 * 5)
+            redis_store.expire(f'token:{token}', 60 * 10)  # 10 minute
 
-            return {'code': 200, 'token': token, 'login_user_info': login_user_info}
+            return {'code': 200, 'message': '登陆成功', 'resp_data': login_user_info}
         except Exception as e:
             logger.error(e)
             db.session.rollback()

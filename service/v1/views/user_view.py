@@ -12,12 +12,17 @@ from service.models import (DIDUserModel,
 from service.models import (DICUserStatusModel,
                             DICGroupTypeModel,
                             DICGroupStatusModel)
+from service.v1.serializers import (DIDUserSchema,
+                                    DIDGroupSchema,
+                                    DICUserStatusSchema,
+                                    DICGroupTypeSchema,
+                                    DICGroupStatusSchema)
 
 
 class UserView(Resource):
-    # @verify_token(request)
+    @verify_token(request)
     def get(self):
-        _user_id = request.args.get('id')
+        _login_user_info = getattr(request, 'login_user_info')
 
         try:
             user_query = db.session.query(DIDUserModel.id,
@@ -29,10 +34,14 @@ class UserView(Resource):
                                           DIDUserModel.status,
                                           DIDUserModel.ctime,
                                           DIDUserModel.mtime). \
-                filter(DIDUserModel.id == _user_id).first()
+                filter(DIDUserModel.status != 0,
+                       DIDUserModel.id == _login_user_info.get('id')).first()
 
-            return {'user_id': user_query.id, 'password': user_query.passwd}
+            resp_data = DIDUserSchema().dump(user_query).data
+
+            return {'code': 200, 'resp_data': resp_data}
         except Exception as e:
+            db.session.rollback()
             logger.error(e)
             raise e
 
@@ -67,9 +76,10 @@ class UserView(Resource):
             db.session.add(_user_data)
             db.session.commit()
 
-            return {'code': 200, 'message': '添加成功'}
+            resp_data = DIDUserSchema().dump(_user_data).data
+            return {'code': 200, 'resp_data': resp_data, 'message': '添加成功'}
         except Exception as e:
-            logger.error(e)
             db.session.rollback()
+            logger.error(e)
             raise e
         
