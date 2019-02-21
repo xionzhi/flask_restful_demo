@@ -18,7 +18,7 @@ def verify_token(request):
                 if redis_store.exists(f'token:{token}') == 1:
                     login_user_info = redis_store.hgetall(f'token:{token}')
                     if login_user_info is None:
-                        raise ReLoginException
+                        raise TokenNotFoundException
                     setattr(request, 'login_user_info', login_user_info)
                     return func(*args, **kwargs)
                 else:

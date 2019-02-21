@@ -6,7 +6,9 @@ from flask_restful import Resource
 
 from service.v1.permissions import verify_token
 from service.common import (AccountRepeatException,
-                            RequestParameterException)
+                            RequestParameterException,
+                            AccountPasswdErrorException,
+                            AccountPasswdShortException)
 from service.models import (DIDUserModel,
                             DIDGroupModel)
 from service.models import (DICUserStatusModel,
@@ -45,6 +47,7 @@ class UserView(Resource):
             logger.error(e)
             raise e
 
+    @verify_token(request)
     def post(self):
         _username = request.json.get('userName')
         _passwd = request.json.get('passWord')
@@ -77,9 +80,57 @@ class UserView(Resource):
             db.session.commit()
 
             resp_data = DIDUserSchema().dump(_user_data).data
+
             return {'code': 200, 'resp_data': resp_data, 'message': '添加成功'}
         except Exception as e:
             db.session.rollback()
             logger.error(e)
             raise e
-        
+    
+    @verify_token(request)
+    def patch(self):
+        _login_user_info = getattr(request, 'login_user_info')
+        _passwd = request.json.get('passWord')
+
+        try:
+            if len(_passwd) < 6:
+                raise AccountPasswdShortException
+
+            db.session.query(DIDUserModel). \
+                filter(DIDUserModel.id == _login_user_info.get('id')). \
+                update({DIDUserModel._password: _passwd})
+            db.session.commit()
+
+            return {'code': 200, 'message': '修改成功'}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(e)
+            raise e
+    
+    @verify_token(request)
+    def put(self):
+        pass
+    
+    @verify_token(request)
+    def delete(self):
+        _login_user_info = getattr(request, 'login_user_info')
+        _passwd = request.json.get('passWord')
+
+        try:
+            user_query = db.session.query(DIDUserModel.id,
+                                          DIDUserModel.passwd,
+                                          DIDUserModel.status). \
+                filter(DIDUserModel.status != 0,
+                       DIDUserModel.id == _login_user_info.get('id'))
+
+            if check_password_hash(user_query.first().passwd, _passwd) is False:
+                raise AccountPasswdErrorException
+
+            user_query.update({DIDUserModel.status: 0})
+            db.session.commit()
+
+            return {'code': 200, 'message': '删除成功'}
+        except Exception as e:
+            db.session.rollback()
+            logger.error(e)
+            raise e

@@ -28,6 +28,16 @@ class AccountRepeatException(_BaseExc):
     status_code = 400
 
 
+class AccountPasswdShortException(_BaseExc):
+    message = '密码长度过短'
+    status_code = 400
+
+
+class AccountPasswdErrorException(_BaseExc):
+    message = '密码输入错误'
+    status_code = 400
+
+
 class RequestParameterException(_BaseExc):
     message = '请求参数错误'
     status_code = 401
@@ -42,4 +52,4 @@ class TokenNotFoundException(_BaseExc):
 def coupon_not_exists_exception(error):
     if isinstance(error, _BaseExc):
         return jsonify({'code': error.status_code, 'message': error.message}), error.status_code
-    return jsonify({'message': '出现了异常'}), 500
+    return jsonify({'message': '你触发了一个异常'}), 500
