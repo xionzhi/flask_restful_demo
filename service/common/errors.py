@@ -52,4 +52,4 @@ class TokenNotFoundException(_BaseExc):
 def coupon_not_exists_exception(error):
     if isinstance(error, _BaseExc):
         return jsonify({'code': error.status_code, 'message': error.message}), error.status_code
-    return jsonify({'message': '你触发了一个异常'}), 500
+    return jsonify({'message': '你成功触发了一个异常'}), 500

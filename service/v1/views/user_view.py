@@ -86,7 +86,7 @@ class UserView(Resource):
             db.session.rollback()
             logger.error(e)
             raise e
-    
+
     @verify_token(request)
     def patch(self):
         _login_user_info = getattr(request, 'login_user_info')

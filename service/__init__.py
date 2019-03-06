@@ -3,11 +3,13 @@ import socket
 from flask import Flask
 from flask_restful import Api
 from pymongo import MongoClient
+from celery import Celery, platforms
 from flask_bcrypt import Bcrypt
 from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
+platforms.C_FORCE_ROOT = True
 
 __all__ = [
     'app',
@@ -23,6 +25,7 @@ __all__ = [
 app = Flask(__name__, static_folder='../static')
 
 hostname = socket.gethostname()
+
 if hostname == 'ProServiceName':
     app.config.from_object('config.pro')
 else:
@@ -30,6 +33,11 @@ else:
 
 app.debug = app.config['APP_DEBUG']
 app.config['JSON_AS_ASCII'] = False
+
+celery = Celery(__name__, broker=f'amqp://{app.config["BROKER_USER"]}:{app.config["BROKER_PWD"]}@'
+                                 f'{app.config["BROKER_HOST"]}:{app.config["BROKER_PORT"]}/'
+                                 f'{app.config["BROKER_VHOST"]}')
+celery.conf.update(app.config)
 
 app.config.setdefault('SQLALCHEMY_DATABASE_URI',
                       f'mysql+pymysql://{app.config["DATABASE_USER"]}:{app.config["DATABASE_PASSWORD"]}@'

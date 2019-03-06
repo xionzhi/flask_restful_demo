@@ -6,7 +6,9 @@ from flask_restful import Resource
 
 from service import (db, logger, redis_store)
 from service.v1.permissions import verify_token
+from service.task import (async_test_log)
 from service.common import (AccountNotFoundException,
+                            RequestParameterException,
                             AccountPasswdErrorException)
 from service.models import (DIDUserModel,
                             DIDGroupModel)
@@ -16,6 +18,15 @@ from service.models import (DICUserStatusModel,
 
 
 class LoginView(Resource):
+    def get(self):
+        _message = request.args.get('message', None, str)
+        if _message is not None:
+            async_test_log.delay(_message)
+        else:
+            async_test_log.delay('None')
+
+        return {"index": _message}
+
     def post(self):
         _passwd = request.json.get('passWord')
         _phone = request.json.get('phoneNumber')

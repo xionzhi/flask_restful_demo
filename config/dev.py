@@ -24,6 +24,13 @@ REDIS_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
 MONGODB_HOST = '127.0.0.1'
 MONGODB_PORT = 27017
 
+# broker conf
+BROKER_USER = 'guest'
+BROKER_PWD = 'guest'
+BROKER_VHOST = '/'
+BROKER_HOST = '127.0.0.1'
+BROKER_PORT = 5672
+
 base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # log conf
