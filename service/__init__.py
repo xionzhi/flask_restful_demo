@@ -1,3 +1,9 @@
+"""
+@Time    : 18-4-23 下午2:36
+@Author  : xionzhi
+@Desc    : 登陆
+"""
+
 import socket
 
 from flask import Flask
@@ -13,6 +19,7 @@ platforms.C_FORCE_ROOT = True
 
 __all__ = [
     'app',
+    'celery',
     'redis_store',
     'mongodb_client',
     'db',

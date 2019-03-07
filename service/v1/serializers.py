@@ -1,3 +1,9 @@
+"""
+@Time    : 18-4-23 下午2:36
+@Author  : xionzhi
+@Desc    : 格式化
+"""
+
 from marshmallow import fields
 
 from service import ma, redis_store

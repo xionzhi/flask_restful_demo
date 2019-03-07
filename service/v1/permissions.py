@@ -1,3 +1,9 @@
+"""
+@Time    : 18-4-23 下午2:36
+@Author  : xionzhi
+@Desc    : 鉴权
+"""
+
 from functools import wraps
 
 from service import redis_store, logger

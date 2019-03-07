@@ -1,3 +1,9 @@
+"""
+@Time    : 18-4-23 下午2:36
+@Author  : xionzhi
+@Desc    : 登陆
+"""
+
 from uuid import uuid1
 from flask import request
 from sqlalchemy import func, and_, or_

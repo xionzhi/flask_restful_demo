@@ -1,3 +1,9 @@
+"""
+@Time    : 18-4-23 下午2:36
+@Author  : xionzhi
+@Desc    : 用户信息
+"""
+
 from service import (db, logger)
 
 from flask import request
@@ -106,11 +112,11 @@ class UserView(Resource):
             db.session.rollback()
             logger.error(e)
             raise e
-    
+
     @verify_token(request)
     def put(self):
         pass
-    
+
     @verify_token(request)
     def delete(self):
         _login_user_info = getattr(request, 'login_user_info')

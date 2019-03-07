@@ -1,7 +1,11 @@
+"""
+@Time    : 18-4-23 下午2:36
+@Author  : xionzhi
+@Desc    : 开发模式配置文件
+"""
+
 import os
 import logging.handlers
-
-from datetime import timedelta
 
 
 APP_DEBUG = True

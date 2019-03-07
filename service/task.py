@@ -1,3 +1,9 @@
+"""
+@Time    : 18-4-23 下午2:36
+@Author  : xionzhi
+@Desc    : 任务消息
+"""
+
 import time
 
 from service import (celery,
@@ -10,6 +16,7 @@ def async_test_log(message: str):
     测试消息队列
     """
     time.sleep(60)
+    
     logger.error(f"async_test_log: {message}")
 
 
