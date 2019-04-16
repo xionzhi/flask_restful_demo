@@ -1,25 +1,29 @@
 """
 @Time    : 18-4-23 下午2:36
 @Author  : xionzhi
-@Desc    : 用户信息
+@Desc    : 用户
 """
 
-from service import (db, logger)
+from service import db, logger
 
 from flask import request
 from sqlalchemy import func, and_, or_
 from flask_restful import Resource
+from flask_bcrypt import check_password_hash
 
 from service.v1.permissions import verify_token
 from service.common import (AccountRepeatException,
                             RequestParameterException,
                             AccountPasswdErrorException,
                             AccountPasswdShortException)
+
 from service.models import (DIDUserModel,
                             DIDGroupModel)
+
 from service.models import (DICUserStatusModel,
                             DICGroupTypeModel,
                             DICGroupStatusModel)
+
 from service.v1.serializers import (DIDUserSchema,
                                     DIDGroupSchema,
                                     DICUserStatusSchema,

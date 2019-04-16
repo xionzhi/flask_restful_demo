@@ -1,7 +1,7 @@
 """
 @Time    : 18-4-23 下午2:36
 @Author  : xionzhi
-@Desc    : 登陆
+@Desc    : 入口
 """
 
 import socket

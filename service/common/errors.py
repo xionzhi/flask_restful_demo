@@ -39,11 +39,6 @@ class AccountPasswdShortException(_BaseExc):
     status_code = 400
 
 
-class AccountPasswdErrorException(_BaseExc):
-    message = '密码输入错误'
-    status_code = 400
-
-
 class RequestParameterException(_BaseExc):
     message = '请求参数错误'
     status_code = 401

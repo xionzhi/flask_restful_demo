@@ -34,16 +34,27 @@ BROKER_PWD = 'guest'
 BROKER_VHOST = '/'
 BROKER_HOST = '127.0.0.1'
 BROKER_PORT = 5672
+TASK_SERIALIZER = 'pickle'
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERY_ACCEPT_CONTENT = ['json', 'msgpack']
+CELERY_TASK_SERIALIZER = 'msgpack'
+CELERY_EVENT_SERIALIZER = 'msgpack'
+CELERY_RESULT_SERIALIZER = 'json'
+BROKER_POOL_LIMIT = 10
+CELERY_MAX_TASKS_PER_CHILD = 100
+CELERY_IMPORTS = (
+    'service.task',
+)
 
-base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # log conf
-log_file = base_dir + '/log/' + 'service.log'
-handler = logging.handlers.TimedRotatingFileHandler(log_file, 'D', 1, 7)
-fmt = '%(levelname)s %(asctime)s %(pathname)s [line:%(lineno)d] %(message)s'
-formatter = logging.Formatter(fmt)
-handler.setFormatter(formatter)
+LOG_FILE = BASE_DIR + '/log/' + 'service.log'
+HANDLER = logging.handlers.TimedRotatingFileHandler(LOG_FILE, 'D', 1, 7)
+LOG_FMT = '%(levelname)s %(asctime)s %(pathname)s [line:%(lineno)d] %(message)s'
+LOG_FORMATTER = logging.Formatter(LOG_FMT)
+HANDLER.setFormatter(LOG_FORMATTER)
 
 LOGGER = logging.getLogger(__name__)
-LOGGER.addHandler(handler)
+LOGGER.addHandler(HANDLER)
 LOGGER.setLevel(logging.INFO)

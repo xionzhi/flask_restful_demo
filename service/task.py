@@ -6,6 +6,8 @@
 
 import time
 
+from datetime import datetime
+
 from service import (celery,
                      logger)
 
@@ -15,9 +17,9 @@ def async_test_log(message: str):
     """
     测试消息队列
     """
-    time.sleep(60)
-    
-    logger.error(f"async_test_log: {message}")
+    time.sleep(5)
+
+    logger.info(f"async_test_log: {message},{datetime.now()}")
 
 
 # cat /usr/local/etc/supervisor.d/flask_demo.ini
